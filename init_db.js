@@ -9,9 +9,9 @@ var DROP = true;
 
 DB.sequelize.sync({force: DROP||false}).then(() => {
     return Orgs.create({name: "My New Org"}).then(org => {
-        Users.create({organisationId: org.id, name: 'Craig'});
-        Users.create({organisationId: org.id, name: 'Vicky'});
-        Users.create({organisationId: org.id, name: 'Sophie'});
+        Users.create({organisationId: org.id, name: 'Craig',  username:'craig001',  password:'passw0rd'});
+        Users.create({organisationId: org.id, name: 'Vicky',  username:'vicky001',  password:'passw0rd'});
+        Users.create({organisationId: org.id, name: 'Sophie', username:'sophie001', password:'passw0rd'});
         
         Jobs.create({organisationId: org.id, name: 'Manager'});
         Jobs.create({organisationId: org.id, name: 'Gopher'});
