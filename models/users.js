@@ -2,7 +2,7 @@ var bcrypt = require('bcrypt');
 var DB     = require('../lib/sequelize');
 var Orgs   = require('./organisations');
 
-Users = DB.sequelize.define('Users', {
+Users = DB.sequelize.define('users', {
     username: {type: DB.Sequelize.STRING,  allowNull: false, unique: true},
     password: {type: DB.Sequelize.STRING,  allowNull: false, set: setPassword},
     acl:      {type: DB.Sequelize.INTEGER, allowNull: false, defaultValue: 0},

@@ -1,7 +1,7 @@
 var DB   = require('../lib/sequelize');
 var Orgs = require('./organisations');
 
-Jobs = DB.sequelize.define('Jobs', {
+Jobs = DB.sequelize.define('jobs', {
     name: DB.Sequelize.STRING,
 });
 
