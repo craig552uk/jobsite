@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 
 app.use('/api/orgs/:org_id/applications/:app_id/', (req, res) => {
     Apps.findById(req.params.app_id, {
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(item => {
         res.jsonp({data: item});
     });
@@ -30,7 +30,7 @@ app.use('/api/orgs/:org_id/applications/:app_id/', (req, res) => {
 
 app.use('/api/orgs/:org_id/applications/', (req, res) => {
     Apps.findAll({
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(items => {
         res.jsonp({data: items});
     });
@@ -38,7 +38,7 @@ app.use('/api/orgs/:org_id/applications/', (req, res) => {
 
 app.use('/api/orgs/:org_id/files/:file_id/', (req, res) => {
     Files.findById(req.params.file_id, {
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(item => {
         res.jsonp({data: item});
     });
@@ -46,7 +46,7 @@ app.use('/api/orgs/:org_id/files/:file_id/', (req, res) => {
 
 app.use('/api/orgs/:org_id/files/', (req, res) => {
     Files.findAll({
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(items => {
         res.jsonp({data: items});
     });
@@ -54,7 +54,7 @@ app.use('/api/orgs/:org_id/files/', (req, res) => {
 
 app.use('/api/orgs/:org_id/jobs/:job_id/', (req, res) => {
     Jobs.findById(req.params.job_id, {
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(item => {
         res.jsonp({data: item});
     });
@@ -62,7 +62,7 @@ app.use('/api/orgs/:org_id/jobs/:job_id/', (req, res) => {
 
 app.use('/api/orgs/:org_id/jobs/', (req, res) => {
     Jobs.findAll({
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(items => {
         res.jsonp({data: items});
     });
@@ -70,7 +70,7 @@ app.use('/api/orgs/:org_id/jobs/', (req, res) => {
 
 app.use('/api/orgs/:org_id/users/:user_id/', (req, res) => {
     Users.findById(req.params.user_id, {
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(item => {
         res.jsonp({data: item});
     });
@@ -78,7 +78,7 @@ app.use('/api/orgs/:org_id/users/:user_id/', (req, res) => {
 
 app.use('/api/orgs/:org_id/users/', (req, res) => {
     Users.findAll({
-        where: {organisationId: req.params.org_id}
+        where: {organisation_id: req.params.org_id}
     }).then(items => {
         res.jsonp({data: items});
     });
