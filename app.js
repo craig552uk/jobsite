@@ -1,9 +1,10 @@
 var express = require('express');
 var parser  = require('body-parser');
 var logger  = require('bunyan').createLogger({name:'HTTP', level:'debug'});
+var args    = require('aargs');
 
-HOST = '127.0.0.1';
-PORT = 3000;
+HOST = args.host || '127.0.0.1';
+PORT = args.port || 3000;
 
 var Orgs  = require('./models/organisations');
 var Users = require('./models/users');
