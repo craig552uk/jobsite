@@ -6,95 +6,38 @@ var args    = require('aargs');
 HOST = args.host || '127.0.0.1';
 PORT = args.port || 3000;
 
-var Orgs  = require('./models/organisations');
-var Users = require('./models/users');
-var Jobs  = require('./models/jobs');
-var Files = require('./models/files');
-var Apps  = require('./models/applications');
-
+var orgs  = require('./controllers/organisations');
+var apps  = require('./controllers/applications');
+var users = require('./controllers/users');
+var files = require('./controllers/files');
+var jobs  = require('./controllers/jobs');
 
 var app = express();
 app.use(parser.json());
 
+app.get('/api/orgs/:org_id/applications/:app_id/', apps.item);
+app.get('/api/orgs/:org_id/applications/',         apps.list);
+
+app.get('/api/orgs/:org_id/users/:user_id/',       users.item);
+app.get('/api/orgs/:org_id/users/',                users.list);
+
+app.get('/api/orgs/:org_id/files/:file_id/',       files.item);
+app.get('/api/orgs/:org_id/files/',                files.list);
+
+app.get('/api/orgs/:org_id/jobs/:job_id/',         jobs.item);
+app.get('/api/orgs/:org_id/jobs/',                 jobs.list);
+
+app.get('/api/orgs/:org_id/',                      orgs.item);
+app.get('/api/orgs/',                              orgs.list);
+
 app.use((req, res, next) => {
-    logger.info([res.statusCode, req.method, req.url].join(' '));
+    res.status(404).jsonp({error: "Not Found"});
     next();
-});
+})
 
-app.use('/api/orgs/:org_id/applications/:app_id/', (req, res) => {
-    Apps.findById(req.params.app_id, {
-        where: {organisation_id: req.params.org_id}
-    }).then(item => {
-        res.jsonp({data: item});
-    });
-});
-
-app.use('/api/orgs/:org_id/applications/', (req, res) => {
-    Apps.findAll({
-        where: {organisation_id: req.params.org_id}
-    }).then(items => {
-        res.jsonp({data: items});
-    });
-});
-
-app.use('/api/orgs/:org_id/files/:file_id/', (req, res) => {
-    Files.findById(req.params.file_id, {
-        where: {organisation_id: req.params.org_id}
-    }).then(item => {
-        res.jsonp({data: item});
-    });
-});
-
-app.use('/api/orgs/:org_id/files/', (req, res) => {
-    Files.findAll({
-        where: {organisation_id: req.params.org_id}
-    }).then(items => {
-        res.jsonp({data: items});
-    });
-});
-
-app.use('/api/orgs/:org_id/jobs/:job_id/', (req, res) => {
-    Jobs.findById(req.params.job_id, {
-        where: {organisation_id: req.params.org_id}
-    }).then(item => {
-        res.jsonp({data: item});
-    });
-});
-
-app.use('/api/orgs/:org_id/jobs/', (req, res) => {
-    Jobs.findAll({
-        where: {organisation_id: req.params.org_id}
-    }).then(items => {
-        res.jsonp({data: items});
-    });
-});
-
-app.use('/api/orgs/:org_id/users/:user_id/', (req, res) => {
-    Users.findById(req.params.user_id, {
-        where: {organisation_id: req.params.org_id}
-    }).then(item => {
-        res.jsonp({data: item});
-    });
-});
-
-app.use('/api/orgs/:org_id/users/', (req, res) => {
-    Users.findAll({
-        where: {organisation_id: req.params.org_id}
-    }).then(items => {
-        res.jsonp({data: items});
-    });
-});
-
-app.use('/api/orgs/:org_id/', (req, res) => {
-    Orgs.findById(req.params.org_id).then(item => {
-        res.jsonp({data: item});
-    });
-});
-
-app.use('/api/orgs/', (req, res) => {
-    Orgs.findAll().then(items => {
-        res.jsonp({data: items});
-    });
+app.use((req, res, next) => {
+    next();
+    logger.info([res.statusCode, req.method, req.url].join(' '));
 });
 
 // Listen on host and port
