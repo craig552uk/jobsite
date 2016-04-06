@@ -11,7 +11,7 @@ Files = DB.sequelize.define('files', {
 });
 
 Files.belongsTo(Orgs);
-Files.belongsTo(Jobs);
-Files.belongsTo(Apps);
+Files.belongsTo(Jobs); // A File for a Job -or-
+Files.belongsTo(Apps); // A File for an application
 
 module.exports = Files;

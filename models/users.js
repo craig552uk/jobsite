@@ -6,6 +6,7 @@ Users = DB.sequelize.define('users', {
     username: {type: DB.Sequelize.STRING,  allowNull: false, unique: true},
     password: {type: DB.Sequelize.STRING,  allowNull: false, set: setPassword},
     acl:      {type: DB.Sequelize.INTEGER, allowNull: false, defaultValue: 0},
+    source:   {type: DB.Sequelize.INTEGER, allowNull: false, defaultValue: 0},
     name: DB.Sequelize.STRING,
 }, {
     instanceMethods: {
@@ -29,6 +30,11 @@ Users.ACL_INTERNAL_APPLICANT = 20; // Apply for all Jobs in Org and lower
 Users.ACL_EXTERNAL_APPLICANT = 10; // Apply for public Jobs in Org and lower
 Users.ACL_NOTHING            =  0; // Nothing
 
+Users.SOURCE_FACEBOOK        =  4; // User created via facebook login
+Users.SOURCE_TWITTER         =  3; // User created via twitter login
+Users.SOURCE_GOOGLE          =  2; // User created via google login
+Users.SOURCE_LDAP            =  1; // User created via LDAP login
+Users.SOURCE_SIGNUP          =  0; // User created via signup form
 
 // Instance Methods //
 

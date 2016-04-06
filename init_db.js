@@ -9,25 +9,48 @@ var DROP = true;
 
 DB.sequelize.sync({force: DROP||false}).then(() => {
     return Orgs.create({name: "My New Org"}).then(org => {
-        Users.create({organisation_id: org.id, name: 'Craig',  username:'craig001',  password:'passw0rd'});
-        Users.create({organisation_id: org.id, name: 'Vicky',  username:'vicky001',  password:'passw0rd'});
-        Users.create({organisation_id: org.id, name: 'Sophie', username:'sophie001', password:'passw0rd'});
+        Users.create({organisation_id: org.id, name: 'Craig',  username:'craig001',  password:'passw0rd', acl: Users.ACL_GOD});
+        Users.create({organisation_id: org.id, name: 'Vicky',  username:'vicky001',  password:'passw0rd', acl: Users.ACL_ADMIN});
+        Users.create({organisation_id: org.id, name: 'Sophie', username:'sophie001', password:'passw0rd', acl: Users.ACL_SPONSOR});
+        Users.create({organisation_id: org.id, name: 'Woody',  username:'woody001',  password:'passw0rd', acl: Users.ACL_INTERNAL_APPLICANT});
+        Users.create({organisation_id: org.id, name: 'Maisie', username:'maisie001', password:'passw0rd', acl: Users.ACL_EXTERNAL_APPLICANT});
+        Users.create({organisation_id: org.id, name: 'Puddle', username:'puddle001', password:'passw0rd', acl: Users.ACL_NOTHING});
         
-        Jobs.create({organisation_id: org.id, name: 'Manager'}).then(job => {
+        Jobs.create({organisation_id: org.id, name: 'Manager', user_id:3}).then(job => {
             Files.create({organisation_id: org.id, job_id: job.id, name: 'ManagerJobSpec.pdf', size: 9591, mime: 'application/pdf', url: 'http://aws.amazon.com/bar'});
+            
+            Apps.create({organisation_id: org.id, job_id:job.id, user_id:4}).then(app => {
+                Files.create({organisation_id: org.id, application_id: app.id, name: 'CV.pdf', size: 6548, mime: 'application/pdf', url: 'http://aws.amazon.com/safd.pdf'});
+            });
+            
+            Apps.create({organisation_id: org.id, job_id:job.id, user_id:5}).then(app => {
+                Files.create({organisation_id: org.id, application_id: app.id, name: 'CV.pdf', size: 9875, mime: 'application/pdf', url: 'http://aws.amazon.com/safd.pdf'});
+            });
         });
 
-        Jobs.create({organisation_id: org.id, name: 'Gopher'}).then(job => {
-            Files.create({organisation_id: org.id, job_id: job.id, name: 'GopherJobSpec.pdf', size: 3624, mime: 'application/pdf', url: 'http://aws.amazon.com/bar'});
+        Jobs.create({organisation_id: org.id, name: 'Cleaner', user_id:3}).then(job => {
+            Files.create({organisation_id: org.id, job_id: job.id, name: 'CleanerJobSpec.pdf', size: 9591, mime: 'application/pdf', url: 'http://aws.amazon.com/bar'});
+            
+            Apps.create({organisation_id: org.id, job_id:job.id, user_id:4}).then(app => {
+                Files.create({organisation_id: org.id, application_id: app.id, name: 'CV.pdf', size: 6548, mime: 'application/pdf', url: 'http://aws.amazon.com/safd.pdf'});
+            });
+            
+            Apps.create({organisation_id: org.id, job_id:job.id, user_id:5}).then(app => {
+                Files.create({organisation_id: org.id, application_id: app.id, name: 'CV.pdf', size: 9875, mime: 'application/pdf', url: 'http://aws.amazon.com/safd.pdf'});
+            });
         });
 
-        Jobs.create({organisation_id: org.id, name: 'Skivvy'}).then(job => {
-            Files.create({organisation_id: org.id, job_id: job.id, name: 'SkivvyJobSpec.pdf', size: 8235, mime: 'application/pdf', url: 'http://aws.amazon.com/bar'});
+        Jobs.create({organisation_id: org.id, name: 'Gopher', user_id:3}).then(job => {
+            Files.create({organisation_id: org.id, job_id: job.id, name: 'GopherJobSpec.pdf', size: 9591, mime: 'application/pdf', url: 'http://aws.amazon.com/bar'});
+            
+            Apps.create({organisation_id: org.id, job_id:job.id, user_id:4}).then(app => {
+                Files.create({organisation_id: org.id, application_id: app.id, name: 'CV.pdf', size: 6548, mime: 'application/pdf', url: 'http://aws.amazon.com/safd.pdf'});
+            });
+            
+            Apps.create({organisation_id: org.id, job_id:job.id, user_id:5}).then(app => {
+                Files.create({organisation_id: org.id, application_id: app.id, name: 'CV.pdf', size: 9875, mime: 'application/pdf', url: 'http://aws.amazon.com/safd.pdf'});
+            });
         });
-
-        Apps.create({organisation_id: org.id, name: 'App 1'});
-        Apps.create({organisation_id: org.id, name: 'App 2'});
-        Apps.create({organisation_id: org.id, name: 'App 3'});
     })
 }).catch(err => {
     console.error(err);
