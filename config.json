@@ -1,0 +1,18 @@
+{
+    "development": {
+        "hostname": "http://localhost:3000",
+        "database": {
+            "dialect":  "sqlite",
+            "storage":  "db.sqlite"
+        }
+    },
+    "production": {
+        "hostname": "http://app.craig-russell.co.uk",
+        "database": {
+            "database": "jobsite",
+            "username": "root",
+            "password": "passw0rd",
+            "dialect":  "mysql"
+        }
+    }    
+}

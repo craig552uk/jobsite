@@ -63,14 +63,12 @@ function checkACL(min_acl_level){
 }
 
 /**
- * JSON representation
- * Excludes password field
+ * Exclude password from JSON API object
  */
 function toJSON(){
-    var modelName  = this.$modelOptions.name.plural;
-    var dataValues = this.dataValues;
-    delete dataValues.password;
-    return {type: modelName, id: this.id, properties: dataValues}
+    var json = DB.define.instanceMethods.toJSON.call(this);
+    delete json.properties.password;
+    return json;
 }
 
 // Class Methods //
