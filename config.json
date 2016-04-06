@@ -12,7 +12,7 @@
     "testing": {
         "hostname": "http://localhost:3000",
         "logging": {
-            "level": false
+            "level": 100
         },
         "database": {
             "dialect":  "sqlite",

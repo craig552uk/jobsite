@@ -1,8 +1,11 @@
 var express   = require('express');
 var HTTPError = require('http-errors');
 var parser    = require('body-parser');
-var logger    = require('bunyan').createLogger({name:'HTTP', level:'debug'});
+var logger    = require('bunyan');
 var args      = require('aargs');
+var config    = require('./lib/config');
+
+logger = logger.createLogger({name:'HTTP', level:config.logging.level});
 
 HOST = args.host || '127.0.0.1';
 PORT = args.port || 3000;
@@ -29,6 +32,13 @@ app.use((req, res, next) => {
     next();
 });
 
+// Unauthenticated routes for testing
+app.all('/hello/',  (req, res) => res.send('Hello'));
+app.all('/teapot/', (req, res) => res.jsonp(HTTPError.ImATeapot()));
+app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
+app.all('/echo/',   (req, res) => res.jsonp({body:req.body, headers:req.headers}));
+app.all('/error/',  (req, res) => { throw Error("Oh Crap!")});
+
 // Authenticated requests only
 app.use((req, res, next) => {
     if(req.header('Authorization')){
@@ -50,11 +60,6 @@ var files = require('./controllers/files');
 var jobs  = require('./controllers/jobs');
 
 // Routes
-app.all('/error/',  (req, res) => { throw Error("Oh Crap!")});
-app.all('/teapot/', (req, res) => res.jsonp(HTTPError.ImATeapot()));
-app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
-app.all('/echo/',   (req, res) => res.jsonp({body:req.body, headers:req.headers}));
-
 app.get(   '/api/orgs/:org_id/applications/:app_id/', apps.item);
 app.post(  '/api/orgs/:org_id/applications/:app_id/', apps.update);
 app.delete('/api/orgs/:org_id/applications/:app_id/', apps.delete);
@@ -110,3 +115,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, HOST, () => {
     logger.info(`Listening on http://${HOST}:${PORT}`);
 });
+
+exports.app = app;
