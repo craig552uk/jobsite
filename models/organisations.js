@@ -1,7 +1,7 @@
 var DB = require('../lib/sequelize');
 
 Organisations = DB.sequelize.define('organisations', {
-    name: DB.Sequelize.STRING,
+    name: {type: DB.Sequelize.STRING, allowNull: false},
 });
 
 module.exports = Organisations;
