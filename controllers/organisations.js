@@ -1,4 +1,5 @@
-var Orgs  = require('../models/organisations');
+var HTTPError = require('http-errors');
+var Orgs      = require('../models/organisations');
 
 exports.list = function(req, res){
     Orgs.findAll().then(items => {
@@ -8,7 +9,7 @@ exports.list = function(req, res){
 
 exports.item = function(req, res){
     Orgs.findById(req.params.org_id).then(item => {
-        res.jsonp(item);
+        res.jsonp(item || HTTPError.NotFound());
     });
 }
 

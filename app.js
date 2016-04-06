@@ -1,7 +1,8 @@
-var express = require('express');
-var parser  = require('body-parser');
-var logger  = require('bunyan').createLogger({name:'HTTP', level:'debug'});
-var args    = require('aargs');
+var express   = require('express');
+var HTTPError = require('http-errors');
+var parser    = require('body-parser');
+var logger    = require('bunyan').createLogger({name:'HTTP', level:'debug'});
+var args      = require('aargs');
 
 HOST = args.host || '127.0.0.1';
 PORT = args.port || 3000;
@@ -16,22 +17,20 @@ var users = require('./controllers/users');
 var files = require('./controllers/files');
 var jobs  = require('./controllers/jobs');
 
-/**
- * Make a JSON API error object
- */
-function mkError(status, title, description){
-    var obj = {status: status, title: title};
-    if(description) obj.description = description;
-    return obj;
-}
-
 // Wrap jsonp responses in json API format and log
 app.use((req, res, next) => {
     var orig_jsonp = res.jsonp;
-    res.jsonp = function(data){
-        data = (res.statusCode < 400) ? {data: data} : {errors: [data]};
-        orig_jsonp.call(this, data);
-        logger.info({request: req.body, response: data}, `${res.statusCode} ${req.method} ${req.url}`);
+    res.jsonp = function(obj){
+
+        if(obj instanceof Error){
+            res.status(obj.statusCode);
+            var json = {errors: [{status: obj.statusCode, title: obj.message}]};
+        }else{
+            var json = {obj: obj};
+        }
+
+        orig_jsonp.call(this, json);
+        logger.info({request: req.body, response: json}, `${res.statusCode} ${req.method} ${req.url}`);
     }
     next();
 });
@@ -57,13 +56,13 @@ app.get('/api/orgs/',                              orgs.list);
 
 // 404
 app.use((req, res, next) => {
-    res.status(404).jsonp(mkError(404, "Not Found", "The requested resource cannot found"));
+    res.jsonp(HTTPError.NotFound());
     next();
 })
 
 // 500
 app.use((err, req, res, next) => {
-    res.status(500).jsonp(mkError(500, "Unknown Server Error", "An unknown error occurred - sorry"));
+    res.jsonp(HTTPError.InternalServerError());
     logger.error(err);
     next();
 });

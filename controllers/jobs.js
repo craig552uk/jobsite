@@ -12,7 +12,7 @@ exports.item = function(req, res){
     Jobs.findById(req.params.job_id, {
         where: {organisation_id: req.params.org_id}
     }).then(item => {
-        res.jsonp(item);
+        res.jsonp(item || HTTPError.NotFound());
     });
 }
 
