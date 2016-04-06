@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 // Unauthenticated routes for testing
-app.all('/hello/',  (req, res) => res.send('Hello'));
+app.all('/hello/',  (req, res) => res.jsonp('Hello'));
 app.all('/teapot/', (req, res) => res.jsonp(HTTPError.ImATeapot()));
 app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
 app.all('/echo/',   (req, res) => res.jsonp({body:req.body, headers:req.headers}));
