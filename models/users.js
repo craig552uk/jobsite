@@ -12,6 +12,7 @@ Users = DB.sequelize.define('users', {
     instanceMethods: {
         checkPassword: checkPassword,
         checkACL:      checkACL,
+        toJSON:        toJSON,
     },
     classMethods: {
         authenticate: authenticate,
@@ -61,6 +62,16 @@ function checkACL(min_acl_level){
     return this.acl >= min_acl_level;
 }
 
+/**
+ * JSON representation
+ * Excludes password field
+ */
+function toJSON(){
+    var modelName  = this.$modelOptions.name.plural;
+    var dataValues = this.dataValues;
+    delete dataValues.password;
+    return {type: modelName, id: this.id, properties: dataValues}
+}
 
 // Class Methods //
 

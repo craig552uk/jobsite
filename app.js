@@ -15,8 +15,6 @@ app.use((req, res, next) => {
     var orig_jsonp = res.jsonp;
     res.jsonp = function(obj){
 
-        logger.info({obj:obj}, "foo")
-
         if(obj instanceof Error){
             res.status(obj.statusCode);
             var json = {errors: [{status: obj.statusCode, title: obj.message}]};

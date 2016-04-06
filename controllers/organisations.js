@@ -21,5 +21,5 @@ exports.update = function(req, res, next){
 
 exports.delete = function(req, res, next){
     var where = {id: req.params.org_id};
-    model.delete(Orgs, where, 'organisations').then(data => res.jsonp(data)).catch(next);
+    model.delete(Orgs, where).then(data => res.jsonp(data)).catch(next);
 }
