@@ -16,14 +16,29 @@ var users = require('./controllers/users');
 var files = require('./controllers/files');
 var jobs  = require('./controllers/jobs');
 
-// Log HTTP request
+/**
+ * Make a JSON API error object
+ */
+function mkError(status, title, description){
+    var obj = {status: status, title: title};
+    if(description) obj.description = description;
+    return obj;
+}
+
+// Wrap jsonp responses in json API format and log
 app.use((req, res, next) => {
+    var orig_jsonp = res.jsonp;
+    res.jsonp = function(data){
+        data = (res.statusCode < 400) ? {data: data} : {errors: [data]};
+        orig_jsonp.call(this, data);
+        logger.info({request: req.body, response: data}, `${res.statusCode} ${req.method} ${req.url}`);
+    }
     next();
-    logger.info(`${res.statusCode} ${req.method} ${req.url}`);
 });
 
 // Routes
 app.get('/error/', (req, res) => { throw Error("Oh Crap!")});
+app.get('/redir/', (req, res) => { res.redirect(301, 'https://google.com'); })
 
 app.get('/api/orgs/:org_id/applications/:app_id/', apps.item);
 app.get('/api/orgs/:org_id/applications/',         apps.list);
@@ -40,16 +55,15 @@ app.get('/api/orgs/:org_id/jobs/',                 jobs.list);
 app.get('/api/orgs/:org_id/',                      orgs.item);
 app.get('/api/orgs/',                              orgs.list);
 
-
 // 404
 app.use((req, res, next) => {
-    res.status(404).jsonp({error: "Not Found"});
+    res.status(404).jsonp(mkError(404, "Not Found", "The requested resource cannot found"));
     next();
 })
 
 // 500
 app.use((err, req, res, next) => {
-    res.status(500).jsonp({error: "Unknown Server Error"});
+    res.status(500).jsonp(mkError(500, "Unknown Server Error", "An unknown error occurred - sorry"));
     logger.error(err);
     next();
 });
