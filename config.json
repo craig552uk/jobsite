@@ -1,13 +1,29 @@
 {
     "development": {
         "hostname": "http://localhost:3000",
+        "logging": {
+            "level": "debug"
+        },
         "database": {
             "dialect":  "sqlite",
             "storage":  "db.sqlite"
         }
     },
+    "testing": {
+        "hostname": "http://localhost:3000",
+        "logging": {
+            "level": false
+        },
+        "database": {
+            "dialect":  "sqlite",
+            "storage":  ""
+        }
+    },
     "production": {
         "hostname": "http://app.craig-russell.co.uk",
+        "logging": {
+            "level": "info"
+        },
         "database": {
             "database": "jobsite",
             "username": "root",
