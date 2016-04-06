@@ -23,9 +23,23 @@ app.use((req, res, next) => {
         }
 
         orig_jsonp.call(this, json);
-        logger.info({request: req.body, response: json}, `${res.statusCode} ${req.method} ${req.url}`);
+        var data = {credentials:{username:req.username}, request: req.body, response: json};
+        logger.info(data, `${res.statusCode} ${req.method} ${req.url}`);
     }
     next();
+});
+
+// Authenticated requests only
+app.use((req, res, next) => {
+    if(req.header('Authorization')){
+        var auth = new Buffer(req.header('Authorization').replace('Basic',''), 'base64').toString().split(':');
+        req.username = auth[0];
+        req.password = auth[1];
+        // TODO authenticate and store user object in request
+        next();
+    }else{
+        res.jsonp(HTTPError.Unauthorized());
+    }
 });
 
 // Controllers
