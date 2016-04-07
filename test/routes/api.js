@@ -16,9 +16,8 @@ describe('API Authentication', () => {
         });
     });
 
-    // Pending implementation
-    xit('GET /api/ should deny bad username/password requests', done => {
-        requestBadAuth.get({
+    it('GET /api/ should deny bad username/password requests', done => {
+        requestNoAuth.get({
             url: '/api/',
             auth: {user: 'foo', pass: 'bar'}
         }, (err, res, body) => {

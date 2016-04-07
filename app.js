@@ -4,6 +4,7 @@ var parser    = require('body-parser');
 var logger    = require('bunyan');
 var args      = require('aargs');
 var config    = require('./lib/config');
+var userauth  = require('./lib/user-auth');
 
 logger = logger.createLogger({name:'HTTP', level:config.logging.level});
 
@@ -26,7 +27,7 @@ app.use((req, res, next) => {
         }
 
         orig_jsonp.call(this, json);
-        var data = {credentials:{username:req.username}, request: req.body, response: json};
+        var data = {credentials:{ user:req.user }, request: req.body, response: json};
         logger.info(data, `${res.statusCode} ${req.method} ${req.url}`);
     }
     next();
@@ -39,25 +40,15 @@ app.all('/teapot/', (req, res) => res.jsonp(HTTPError.ImATeapot()));
 app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
 app.all('/error/',  (req, res) => { throw Error("Oh Crap!")});
 
-// Authenticated requests only
-app.use('/api/?', (req, res, next) => {
-    if(req.header('Authorization')){
-        var auth = new Buffer(req.header('Authorization').replace('Basic',''), 'base64').toString().split(':');
-        req.username = auth[0];
-        req.password = auth[1];
-        // TODO authenticate and store user object in request
-        next();
-    }else{
-        res.jsonp(HTTPError.Unauthorized());
-    }
-});
-
 // Controllers
 var orgs  = require('./controllers/organisations');
 var apps  = require('./controllers/applications');
 var users = require('./controllers/users');
 var files = require('./controllers/files');
 var jobs  = require('./controllers/jobs');
+
+// API requires user authentication
+app.use('/api/?', userauth);
 
 // Routes
 app.get(   '/api/',  (req, res) => res.jsonp('Hello API'));
