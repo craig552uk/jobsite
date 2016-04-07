@@ -40,7 +40,7 @@ app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
 app.all('/error/',  (req, res) => { throw Error("Oh Crap!")});
 
 // Authenticated requests only
-app.use((req, res, next) => {
+app.use('/api/?', (req, res, next) => {
     if(req.header('Authorization')){
         var auth = new Buffer(req.header('Authorization').replace('Basic',''), 'base64').toString().split(':');
         req.username = auth[0];
@@ -60,6 +60,8 @@ var files = require('./controllers/files');
 var jobs  = require('./controllers/jobs');
 
 // Routes
+app.get(   '/api/',  (req, res) => res.jsonp('Hello API'));
+
 app.get(   '/api/orgs/:org_id/applications/:app_id/', apps.item);
 app.post(  '/api/orgs/:org_id/applications/:app_id/', apps.update);
 app.delete('/api/orgs/:org_id/applications/:app_id/', apps.delete);

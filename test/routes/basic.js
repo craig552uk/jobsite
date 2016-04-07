@@ -2,22 +2,7 @@
 // Basic routes testing simple web responses
 // 
 var assert  = require('assert');
-var request = require('request');
-var app     = require('../../app');
-
-before(done => {
-    // Start server for tests
-    var HOST = '127.0.0.1';
-    var PORT = 3333;
-    app.listen(PORT, HOST, () => done());
-
-    // HTTP Client defaults
-    request = request.defaults({
-        baseUrl: `http://${HOST}:${PORT}/`,
-        json: true,
-        followRedirect: false,
-    });
-});
+var request = require('../bootstrap').requestJSON;
 
 describe('Basic Routes', () => {
 
