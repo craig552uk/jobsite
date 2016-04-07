@@ -4,7 +4,7 @@
   "description": "A Simple Job Site Application",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=testing && mocha test --recursive"
+    "test": "NODE_ENV=testing mocha test --recursive || exit 1"
   },
   "author": "",
   "license": "ISC",
