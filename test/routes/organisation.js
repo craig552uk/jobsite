@@ -42,6 +42,13 @@ describe('Organisation API', () => {
         });
     });
 
+    it('GET /api/orgs/:id should return 404 if organisation with id does not exist', done => {
+        request.get('/api/orgs/999', (err, res, body) => {
+            assert.equal(res.statusCode, 404);
+            done();
+        });
+    });
+
     it('POST /api/orgs/ should create new organisation', done => {
 
         var data = {name: "My Org"};
@@ -86,6 +93,13 @@ describe('Organisation API', () => {
         });
     });
 
+    it('POST /api/orgs/:id should return 404 if organisation with id does not exist', done => {
+        request.post('/api/orgs/999', (err, res, body) => {
+            assert.equal(res.statusCode, 404);
+            done();
+        });
+    });
+
     it('DELETE /api/orgs/:id should delete organisation with id', done => {
         Orgs.create({name: 'Org'}).then(org1 => {
 
@@ -97,6 +111,13 @@ describe('Organisation API', () => {
                     done();
                 });
             });
+        });
+    });
+
+    it('DELETE /api/orgs/:id should return 404 if organisation with id does not exist', done => {
+        request.del('/api/orgs/999', (err, res, body) => {
+            assert.equal(res.statusCode, 404);
+            done();
         });
     });
 });
