@@ -34,9 +34,9 @@ app.use((req, res, next) => {
 
 // Unauthenticated routes for testing
 app.all('/hello/',  (req, res) => res.jsonp('Hello'));
-app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
 app.all('/echo/',   (req, res) => res.jsonp(req.body));
 app.all('/teapot/', (req, res) => res.jsonp(HTTPError.ImATeapot()));
+app.all('/redir/',  (req, res) => res.redirect(301, 'https://google.com'));
 app.all('/error/',  (req, res) => { throw Error("Oh Crap!")});
 
 // Authenticated requests only
@@ -116,4 +116,4 @@ app.listen(PORT, HOST, () => {
     logger.info(`Listening on http://${HOST}:${PORT}`);
 });
 
-exports.app = app;
+module.exports = app;
