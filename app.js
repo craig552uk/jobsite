@@ -95,8 +95,10 @@ app.use((err, req, res, next) => {
         case 'SequelizeValidationError': 
         case 'SequelizeUniqueConstraintError': 
         case 'SequelizeExclusionConstraintError': 
-        case 'SequelizeForeignKeyConstraintError': 
             res.jsonp(HTTPError.BadRequest(err.message)); break;
+        case 'SequelizeForeignKeyConstraintError': 
+            // 404 as foreign key is usually organisation_id
+            res.jsonp(HTTPError.NotFound()); break;
         default:
             res.jsonp(HTTPError.InternalServerError());
     }
