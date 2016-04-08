@@ -16,19 +16,31 @@ before(done => {
     // Create DB tables
     DB.sequelize.sync({force:true}).then(() => {
         
-        return Orgs.create({name:'Org'}).then(org => {
+        Promise.all([
+            Orgs.create({name:'My Organisation'}).then(org => {
 
-            return Promise.all([
+                return Promise.all([
+                    // User with full API access
+                    Users.create({organisation_id: org.id, name: 'GOD',  username:API_USER,  password:API_PASS, acl: Users.ACL_GOD}),
 
-                // User with full API access
-                Users.create({organisation_id: org.id, name: 'GOD',  username:API_USER,  password:API_PASS, acl: Users.ACL_GOD}),
+                    // One of each other types
+                    Files.create({organisation_id:org.id, name:'file.txt', mime:'text/plain', size:1024, url:'http://cdn.example.com/file.txt'}),
+                    Jobs.create( {organisation_id:org.id, name:'Job One'}),
+                    Apps.create( {organisation_id:org.id, form_data: '{}'}),
+                ]);
+            }),
 
-                // One of each type
-                Jobs.create( {organisation_id:1, name:'Job One'}),
-                Files.create({organisation_id:1, name:'file.txt', mime:'text/plain', size:1024, url:'http://cdn.example.com/file.txt'}),
-                Apps.create( {organisation_id:1, form_data: '{}'}),
-            ]);
-        });
+            Orgs.create({name:'Other Organisation'}).then(org => {
+
+                return Promise.all([
+                    // One of each type
+                    Users.create({organisation_id:org.id, name:'User',  username:'user999', password:'passw0rd'}),
+                    Files.create({organisation_id:org.id, name:'file.txt', mime:'text/plain', size:1024, url:'http://cdn.example.com/file.txt'}),
+                    Jobs.create( {organisation_id:org.id, name:'A Job'}),
+                    Apps.create( {organisation_id:org.id, form_data: '{}'}),
+                ]);
+            }),
+        ]);
 
     }).then(() => {
 
