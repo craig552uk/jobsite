@@ -17,6 +17,7 @@ exports.create = function(req, res, next){
 }
 
 exports.update = function(req, res, next){
+    delete req.body.username; // Can't modify username
     var where = {organisation_id: req.params.org_id, id: req.params.user_id};
     model.update(Users, where, req.body).then(data => res.jsonp(data)).catch(next);
 }
