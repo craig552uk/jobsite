@@ -4,6 +4,10 @@ var Orgs    = require('../../models/organisations');
 
 describe('Organisation API', () => {
 
+    before(done => {
+        return Orgs.create({name: "Org"}).then(() => done()).catch(done);
+    });
+
     it('GET /api/orgs/ should return array of all organisations', done => {
 
         request.get('/api/orgs', (err, res, body) => {
