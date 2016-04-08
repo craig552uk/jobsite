@@ -14,11 +14,53 @@ var rand = () => Math.random().toString(36).slice(-10);
 
 // Child models to apply test suite to
 var models = [
-    {model:Users, type:'user',        name:'User',        data: function(){ return {name:'Jim', username:rand(), password:rand()}; }},
-    {model:Files, type:'file',        name:'File',        data: function(){ return {name:'file.txt', mime:'text/plain', size:1024, url:'http://example.com'}; }},
-    {model:Apps,  type:'application', name:'Application', data: function(){ return {form_data: '{}'}; }},
-    {model:Jobs,  type:'job',         name:'Job',         data: function(){ return {name:'Job'}; }},
+    {
+        model: Users,
+        type:  'user',
+        name:  'User',
+        fields: ['name', 'username', 'acl', 'source'],
+        random: function(){ 
+            return {name:rand(), username:rand(), password:rand()}; 
+        },
+    },
+    {
+        model: Files,
+        type:  'file',
+        name:  'File',
+        fields: ['name', 'mime', 'size', 'url', 'application_id', 'job_id'],
+        random: function(){ 
+            return {name:rand(), mime:'text/plain', size:1024, url:'http://example.com'}; 
+        },
+    },
+    {
+        model: Apps,
+        type:  'application',
+        name:  'Application',
+        fields: ['form_data', 'user_id', 'job_id'],
+        random: function(){ 
+            return {form_data: JSON.stringify({val:rand()})}; 
+        },
+    },
+    {
+        model: Jobs,
+        type:  'job',
+        name:  'Job',
+        fields: ['name', 'user_id'],
+        random: function(){ 
+            return {name:rand()}; 
+        },
+    },
 ];
+
+/**
+ * Assert that fields exist in object
+ */
+function assertFields(obj, fields){
+    fields = fields.concat('id', 'organisation_id', 'updated_at', 'created_at');
+    fields.forEach(field => {
+        assert.ok(field in obj, `Assert property '${field}'`);
+    });
+}
 
 models.forEach(m => {
 
@@ -41,9 +83,7 @@ models.forEach(m => {
                     body.data.forEach(item => {
                         assert.equal(item.type, `${m.type}s`);
                         assert.ok(ids.indexOf(item.id) >=0 );
-                        assert.ok(item.properties.organisation_id);
-                        assert.ok(item.properties.created_at);
-                        assert.ok(item.properties.updated_at);
+                        assertFields(item.properties, m.fields);
                     });
                     done();
                 });
@@ -69,10 +109,8 @@ models.forEach(m => {
                 }).then(item => {
 
                     assert.equal(body.data.type, `${m.type}s`);
-                    assert.equal(body.data.id,   item.id);
-                    assert.ok(body.data.properties.organisation_id);
-                    assert.ok(body.data.properties.created_at);
-                    assert.ok(body.data.properties.updated_at);
+                    assert.equal(body.data.id, item.id);
+                    assertFields(body.data.properties, m.fields);
                     done();
                 });
             });
@@ -97,7 +135,7 @@ models.forEach(m => {
         it(`POST /api/orgs/:id/${m.type}s/ should create new ${m.type}`, done => {
             request.post({
                 url: `/api/orgs/1/${m.type}s`,
-                body: m.data(),
+                body: m.random(),
             }, (err, res, body) => {
 
                 m.model.findOne({
@@ -105,10 +143,8 @@ models.forEach(m => {
                 }).then(item => {
 
                     assert.equal(body.data.type, `${m.type}s`);
-                    assert.equal(body.data.id,   item.id);
-                    assert.ok(body.data.properties.organisation_id);
-                    assert.ok(body.data.properties.created_at);
-                    assert.ok(body.data.properties.updated_at);
+                    assert.equal(body.data.id, item.id);
+                    assertFields(body.data.properties, m.fields);
                     done();
                 });
             });
@@ -117,7 +153,7 @@ models.forEach(m => {
         it(`POST /api/orgs/:id/${m.type}s/ should return 404 if organisation with id does not exist`, done => {
             request.post({
                 url: `/api/orgs/9999/${m.type}s`,
-                body: m.data(),
+                body: m.random(),
             }, (err, res, body) => {
                 assert.equal(res.statusCode, 404);
                 done();
@@ -128,8 +164,8 @@ models.forEach(m => {
 
         it(`POST /api/orgs/:id/${m.type}s/:id should update ${m.type} with id`, done => {
 
-            var data_1 = m.data();
-            var data_2 = m.data();
+            var data_1 = m.random();
+            var data_2 = m.random();
 
             data_1.organisation_id = 1;
 
@@ -148,9 +184,7 @@ models.forEach(m => {
                         assert.equal(body.data.id, item1.id);
                         assert.equal(body.data.id, item2.id);
                         assert.notEqual(item1.updated_at, item2.updated_at);
-                        assert.ok(body.data.properties.organisation_id);
-                        assert.ok(body.data.properties.created_at);
-                        assert.ok(body.data.properties.updated_at);
+                        assertFields(body.data.properties, m.fields);
                         done();
                     });
                 });
@@ -174,7 +208,7 @@ models.forEach(m => {
         // Delete Item //
 
         it(`DELETE /api/orgs/:id/${m.type}s/:id should delete ${m.type} with id`, done => {
-            var data = m.data();
+            var data = m.random();
             data.organisation_id = 1;
             m.model.create(data).then(item1 => {
 
