@@ -3,15 +3,13 @@ var request = require('../bootstrap').requestAPI;
 var Orgs    = require('../../models/organisations');
 var Files   = require('../../models/files');
 
-var my_org;
-
 describe('Files API', () => {
 
-    before(done => {
-        return Orgs.create({name: "Files Org"}).then(org => {my_org = org; done()}).catch(done);
+    xit('GET /api/orgs/:id/files/ should return array of all files', done => {
+        done();
     });
 
-    xit('GET /api/orgs/:id/files/ should return array of all files', done => {
+    xit('GET /api/orgs/:id/files/ should return 404 if organisation with id does not exist', done => {
         done();
     });
 
@@ -19,7 +17,19 @@ describe('Files API', () => {
         done();
     });
 
+    xit('GET /api/orgs/:id/files/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('GET /api/orgs/:id/files/:id should return 404 if file with id does not exist', done => {
+        done();
+    });
+
     xit('POST /api/orgs/:id/files should create new file', done => {
+        done();
+    });
+
+    xit('POST /api/orgs/:id/files/ should return 404 if organisation with id does not exist', done => {
         done();
     });
 
@@ -27,7 +37,23 @@ describe('Files API', () => {
         done();
     });
 
+    xit('POST /api/orgs/:id/files/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('POST /api/orgs/:id/files/:id should return 404 if applicaton with id does not exist', done => {
+        done();
+    });
+
     xit('DELETE /api/orgs/:id/files/:id should delete file with id', done => {
+        done();
+    });
+
+    xit('DELETE /api/orgs/:id/files/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('DELETE /api/orgs/:id/files/:id should return 404 if file with id does not exist', done => {
         done();
     });
 });

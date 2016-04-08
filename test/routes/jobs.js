@@ -3,15 +3,13 @@ var request = require('../bootstrap').requestAPI;
 var Orgs    = require('../../models/organisations');
 var Jobs    = require('../../models/jobs');
 
-var my_org;
-
 describe('Jobs API', () => {
 
-    before(done => {
-        return Orgs.create({name: "Jobs Org"}).then(org => {my_org = org; done()}).catch(done);
+    xit('GET /api/orgs/:id/jobs/ should return array of all jobs', done => {
+        done();
     });
 
-    xit('GET /api/orgs/:id/jobs/ should return array of all jobs', done => {
+    xit('GET /api/orgs/:id/jobs/ should return 404 if organisation with id does not exist', done => {
         done();
     });
 
@@ -19,7 +17,19 @@ describe('Jobs API', () => {
         done();
     });
 
+    xit('GET /api/orgs/:id/jobs/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('GET /api/orgs/:id/jobs/:id should return 404 if job with id does not exist', done => {
+        done();
+    });
+
     xit('POST /api/orgs/:id/jobs should create new job', done => {
+        done();
+    });
+
+    xit('POST /api/orgs/:id/jobs/ should return 404 if organisation with id does not exist', done => {
         done();
     });
 
@@ -27,7 +37,23 @@ describe('Jobs API', () => {
         done();
     });
 
+    xit('POST /api/orgs/:id/jobs/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('POST /api/orgs/:id/jobs/:id should return 404 if applicaton with id does not exist', done => {
+        done();
+    });
+
     xit('DELETE /api/orgs/:id/jobs/:id should delete job with id', done => {
+        done();
+    });
+
+    xit('DELETE /api/orgs/:id/jobs/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('DELETE /api/orgs/:id/jobs/:id should return 404 if job with id does not exist', done => {
         done();
     });
 });

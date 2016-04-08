@@ -3,15 +3,13 @@ var request = require('../bootstrap').requestAPI;
 var Orgs    = require('../../models/organisations');
 var Apps    = require('../../models/applications');
 
-var my_org;
-
 describe('Applications API', () => {
 
-    before(done => {
-        return Orgs.create({name: "Applications Org"}).then(org => {my_org = org; done()}).catch(done);
+    xit('GET /api/orgs/:id/applications/ should return array of all applications', done => {
+        done();
     });
 
-    xit('GET /api/orgs/:id/applications/ should return array of all applications', done => {
+    xit('GET /api/orgs/:id/applications/ should return 404 if organisation with id does not exist', done => {
         done();
     });
 
@@ -19,7 +17,19 @@ describe('Applications API', () => {
         done();
     });
 
+    xit('GET /api/orgs/:id/applications/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('GET /api/orgs/:id/applications/:id should return 404 if application with id does not exist', done => {
+        done();
+    });
+
     xit('POST /api/orgs/:id/applications should create new application', done => {
+        done();
+    });
+
+    xit('POST /api/orgs/:id/applications/ should return 404 if organisation with id does not exist', done => {
         done();
     });
 
@@ -27,7 +37,23 @@ describe('Applications API', () => {
         done();
     });
 
+    xit('POST /api/orgs/:id/applications/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('POST /api/orgs/:id/applications/:id should return 404 if applicaton with id does not exist', done => {
+        done();
+    });
+
     xit('DELETE /api/orgs/:id/applications/:id should delete application with id', done => {
+        done();
+    });
+
+    xit('DELETE /api/orgs/:id/applications/:id should return 404 if organisation with id does not exist', done => {
+        done();
+    });
+
+    xit('DELETE /api/orgs/:id/applications/:id should return 404 if application with id does not exist', done => {
         done();
     });
 });
