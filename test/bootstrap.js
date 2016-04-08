@@ -16,8 +16,17 @@ before(done => {
     // Create DB tables
     DB.sequelize.sync({force:true}).then(() => {
         
-        // Create a user with full API access (no organisation)
-        return Users.create({name: 'Test User 1',  username:API_USER,  password:API_PASS, acl: Users.ACL_GOD});
+        return Orgs.create({name:'Org'}).then(org => {
+
+            return Promise.all([
+
+                // User with full API access
+                Users.create({organisation_id: org.id, name: 'GOD',  username:API_USER,  password:API_PASS, acl: Users.ACL_GOD}),
+
+                // TODO more
+
+            ]);
+        });
 
     }).then(() => {
 

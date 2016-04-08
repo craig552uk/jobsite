@@ -4,16 +4,13 @@ var Orgs    = require('../../models/organisations');
 
 describe('Organisation API', () => {
 
-    before(done => {
-        return Orgs.create({name: "Org"}).then(() => done()).catch(done);
-    });
-
     it('GET /api/orgs/ should return array of all organisations', done => {
 
         request.get('/api/orgs', (err, res, body) => {
 
             Orgs.findAll().then(orgs => {
 
+                assert.ok(body.data.length > 0);
                 var ids = orgs.map(o => o.id);
                 body.data.forEach(org => {
                     assert.equal(org.type, 'organisations')
@@ -28,20 +25,14 @@ describe('Organisation API', () => {
 
     it('GET /api/orgs/:id should return organisation with id', done => {
 
-        Orgs.create({name:'Org'}).then(org1 => {
+        request.get('/api/orgs/1', (err, res, body) => {
 
-            request.get('/api/orgs/'+org1.id, (err, res, body) => {
+            Orgs.findById(1).then(org => {
 
-                Orgs.findById(org1.id).then(org2 => {
-
-                    assert.equal(body.data.type, 'organisations');
-                    assert.equal(body.data.id,   org1.id);
-                    assert.equal(body.data.id,   org2.id);
-                    assert.equal(body.data.properties.name, org1.name);
-                    assert.equal(body.data.properties.name, org2.name);
-                    // TODO assert json api format
-                    done();
-                });
+                assert.equal(body.data.type, 'organisations');
+                assert.equal(body.data.id,   org.id);
+                // TODO assert json api format
+                done();
             });
         });
     });
