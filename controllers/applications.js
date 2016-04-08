@@ -12,6 +12,7 @@ exports.item = function(req, res, next){
 }
 
 exports.create = function(req, res, next){
+    req.body.organisation_id = req.params.org_id;
     model.create(Apps, req.body).then(data => res.jsonp(data)).catch(next);
 }
 
