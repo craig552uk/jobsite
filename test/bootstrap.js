@@ -23,8 +23,10 @@ before(done => {
                 // User with full API access
                 Users.create({organisation_id: org.id, name: 'GOD',  username:API_USER,  password:API_PASS, acl: Users.ACL_GOD}),
 
-                // TODO more
-
+                // One of each type
+                Jobs.create( {organisation_id:1, name:'Job One'}),
+                Files.create({organisation_id:1, name:'file.txt', mime:'text/plain', size:1024, url:'http://cdn.example.com/file.txt'}),
+                Apps.create( {organisation_id:1, form_data: '{}'}),
             ]);
         });
 
