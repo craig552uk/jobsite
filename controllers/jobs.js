@@ -2,7 +2,8 @@ var Jobs = require('../models/jobs');
 var model = require('../lib/sequelize').model;
 
 exports.list = function(req, res, next){
-    model.list(Jobs).then(data => res.jsonp(data)).catch(next);
+    var where = {organisation_id: req.params.org_id};
+    model.list(Jobs, where).then(data => res.jsonp(data)).catch(next);
 }
 
 exports.item = function(req, res, next){
